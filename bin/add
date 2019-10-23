@@ -1,0 +1,18 @@
+#!/bin/sh
+# This will if it can move the target file to ~/.dotfiles/ and then symlink back to the original file
+
+filepath=$1
+dotfilepath="$HOME/.dotfiles"
+
+# Validation
+[ ! -f "$filepath" ] && echo "Source file '$1' cannot be found" && exit
+[ -L "$filepath" ] && echo "Source file '$1' is a symlink, please specify the route file" && exit
+
+file="$(echo "$filepath" | sed "s/.*\///")"
+directory="$(echo "$filepath" | sed 's/\.[^\/.]*$//')"
+newpath="$dotfilepath/$file"
+
+mv $filepath $newpath && 
+	echo "Moved:           $filepath -> $newpath"
+ln -s "$dotfilepath/$file" $filepath && 
+    echo "Symlink created: $dotfilepath/$file -> $filepath"
