@@ -1,2 +1,2 @@
-# dotty
+# dotl
 Simple dotfile manager
