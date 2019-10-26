@@ -2,7 +2,7 @@
 # This will if it can move the target file to ~/.dotfiles/ and then symlink back to the original file
 # Author Marcus Revington <marcusorjames@gmail.com> (https://github.com/marcusorjames)
 
-package='dottyadd'
+package='dotladd'
 
 print_usage() {
   echo 'Move target file into ~/.dotfiles and symlink back'
@@ -23,10 +23,12 @@ dotfilepath="$HOME/.dotfiles"
 [ -L "$filepath" ] && echo "Source file '$1' is a symlink, please specify the route file" && exit
 
 file="$(echo "$filepath" | sed "s/.*\///")"
-directory="$(echo "$filepath" | sed 's/\.[^\/.]*$//')"
-newpath="$dotfilepath/$file"
+directory="$dotfilepath/$(dirname "$filepath" | sed "s|$HOME/||")"
+newpath="$directory/$file"
+
+mkdir -p "$directory"
 
 mv $filepath $newpath && 
 	echo "Moved:           $filepath -> $newpath"
-ln -s "$dotfilepath/$file" $filepath && 
-    echo "Symlink created: $dotfilepath/$file -> $filepath"
+ln -s $newpath $filepath && 
+    echo "Symlink created: $newpath -> $filepath"
