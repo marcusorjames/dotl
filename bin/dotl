@@ -21,8 +21,8 @@ function="$1"
 shift 
 
 case $function in
-    'add') dotladd "$@" ;;
-    'remove'|'rm') dotlrm "$@" ;;
+    'add') $DIR/dotladd "$@" ;;
+    'remove'|'rm') $DIR/dotlrm "$@" ;;
     'install') echo "NOT IMPLEMENTED: run install" ;;
     *) print_usage ; exit 1;;
 esac 
