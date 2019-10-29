@@ -23,7 +23,7 @@ dotfilepath="$HOME/.dotfiles"
 [ -L "$filepath" ] && echo "Source file '$1' is a symlink, please specify the route file" && exit
 
 file="$(echo "$filepath" | sed "s/.*\///")"
-directory="$dotfilepath/$(dirname "$filepath" | sed "s|$HOME/||")"
+directory="$dotfilepath$(dirname "$filepath" | sed "s|$HOME||")"
 newpath="$directory/$file"
 
 mkdir -p "$directory"
