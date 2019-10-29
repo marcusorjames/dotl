@@ -1,0 +1,29 @@
+#!/bin/sh
+# This will if it can move the target file to ~/.dotfiles/ and then symlink back to the original file
+# Author Marcus Revington <marcusorjames@gmail.com> (https://github.com/marcusorjames)
+
+package='dotlrm'
+
+print_usage() {
+  echo 'Remove symlink and move target file from ~/.dotfiles back to source'
+  echo ' '
+  echo "$package [source file]"
+  echo ' '
+  echo 'Example:'
+  echo "$package .vimrc will remove the symlink and move back .vimrc to ~/.vimrc"
+}
+
+[ ! "$#" -gt 0 ] && print_usage && exit 1
+
+filepath=$1 #~/.vimrc
+file="$(echo "$filepath" | sed "s/.*\///")"
+dotfilepathroot="$HOME/.dotfiles"
+dotfilepath="$dotfilepathroot/$(echo "$filepath" | sed "s|$HOME/||")"
+
+# Validation
+[ ! -L "$filepath" ] && [ ! -f "$dotfilepath" ] && echo "Source file '$1' is a not currently symlinked, please specify a file linked to ~/.dotfiles" && exit
+
+rm $filepath &&
+    echo "Symlink removed: $filepath"
+mv $dotfilepath $filepath && 
+    echo "Moved: $dotfilepath -> $filepath"
