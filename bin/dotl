@@ -3,7 +3,8 @@
 # Author Marcus Revington <marcusorjames@gmail.com> (https://github.com/marcusorjames)
 package='dot'
 
-DIR="${BASH_SOURCE%/*}"
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
 if [ ! -d "$DIR" ]; then DIR="$PWD"; fi
 
 print_usage() {
