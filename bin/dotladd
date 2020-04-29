@@ -11,19 +11,20 @@ print_usage() {
   echo ' '
   echo 'Example:'
   echo "$package .vimrc will move .vimrc to ~/.dotfiles/.vimrc and symlink back"
+  echo "Only home directory is supported as the root the dotfiles path is the root of the home directory"
 }
 
 [ ! "$#" -gt 0 ] && print_usage && exit 1
 
-filepath=$1
+filepath="$HOME/$(echo $1 | sed "s|$HOME||")"
 dotfilepath="$HOME/.dotfiles"
 
 # Validation
-[ ! -f "$filepath" ] && echo "Source file '$1' cannot be found" && exit
+[ ! -f "$filepath" ] && echo "Source file '$filepath' cannot be found, use absolute path" && exit
 [ -L "$filepath" ] && echo "Source file '$1' is a symlink, please specify the route file" && exit
 
 file="$(echo "$filepath" | sed "s/.*\///")"
-directory="$dotfilepath$(dirname "$filepath" | sed "s|$HOME||")"
+directory="$dotfilepath$(dirname "$filepath" | sed "s|$HOME||;s|//|/|")"
 newpath="$directory/$file"
 
 mkdir -p "$directory"
